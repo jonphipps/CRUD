@@ -16,6 +16,7 @@ use Backpack\CRUD\app\Http\Controllers\CrudFeatures\SaveActions;
 use Backpack\CRUD\app\Http\Requests\CrudRequest as StoreRequest;
 use Backpack\CRUD\app\Http\Requests\CrudRequest as UpdateRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudFeatures\ShowDetailsRow;
+use Illuminate\View\View;
 
 class CrudController extends BaseController
 {
@@ -53,9 +54,8 @@ class CrudController extends BaseController
     /**
      * Display all rows in the database for this entity.
      *
-     * @return Response
      */
-    public function index()
+    public function index() :View
     {
         $this->crud->hasAccessOrFail('list');
 
@@ -74,9 +74,8 @@ class CrudController extends BaseController
     /**
      * Show the form for creating inserting a new row.
      *
-     * @return Response
      */
-    public function create()
+    public function create(): View
     {
         $this->crud->hasAccessOrFail('create');
 
