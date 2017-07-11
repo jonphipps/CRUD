@@ -55,7 +55,7 @@ class CrudController extends BaseController
      * Display all rows in the database for this entity.
      *
      */
-    public function index() :View
+    public function index()
     {
         $this->crud->hasAccessOrFail('list');
 
@@ -75,7 +75,7 @@ class CrudController extends BaseController
      * Show the form for creating inserting a new row.
      *
      */
-    public function create(): View
+    public function create()
     {
         $this->crud->hasAccessOrFail('create');
 
