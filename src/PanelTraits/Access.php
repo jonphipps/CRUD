@@ -82,13 +82,12 @@ trait Access
      * @param  [string] Permission.
      * @param string $permission
      *
-     * @return bool|null
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function hasAccessOrFail($permission): ?bool
+    public function hasAccessOrFail($permission): void
     {
-        if (! in_array($permission, $this->access)) {
-            throw new AuthorizationException();
+        if (! in_array($permission, $this->access, false)) {
+            throw new AuthorizationException('Unauthorized!');
         }
     }
 }
