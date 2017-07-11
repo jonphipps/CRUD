@@ -4,7 +4,7 @@
 	<section class="content-header">
 	  <h1>
 	    <span class="text-capitalize">{{ $crud->entity_name_plural }}</span>
-	    <small>{{ trans('backpack::crud.all') }} <span class="text-lowercase">{{ $crud->entity_name_plural }}</span> {{ trans('backpack::crud.in_the_database') }}.</small>
+	    <small>{{ trans('backpack::crud.all') }} <span>{{ $crud->entity_name_plural }}</span> {{ trans('backpack::crud.in_the_database') }}.</small>
 	  </h1>
 	  <ol class="breadcrumb">
 	    <li><a href="{{ url(config('backpack.base.route_prefix'), 'dashboard') }}">{{ trans('backpack::crud.admin') }}</a></li>
@@ -39,7 +39,7 @@
             <thead>
               <tr>
                 @if ($crud->details_row)
-                  <th></th> <!-- expand/minimize button column -->
+                  <th data-orderable="false"></th> <!-- expand/minimize button column -->
                 @endif
 
                 {{-- Table columns --}}
@@ -178,7 +178,7 @@
       @endif
 
 	  	var table = $("#crudTable").DataTable({
-        "pageLength": "{{ $crud->getDefaultPageLength() }}",
+        "pageLength": {{ $crud->getDefaultPageLength() }},
         /* Disable initial sort */
         "aaSorting": [],
         "language": {
@@ -304,15 +304,25 @@
 
       @if ($crud->details_row)
       function register_details_row_button_action() {
+        // var crudTable = $('#crudTable tbody');
+        // Remove any previously registered event handlers from draw.dt event callback
+        $('#crudTable tbody').off('click', 'td .details-row-button');
+
+        // Make sure the ajaxDatatables rows also have the correct classes
+        $('#crudTable tbody td .details-row-button').parent('td')
+          .removeClass('details-control').addClass('details-control')
+          .removeClass('text-center').addClass('text-center')
+          .removeClass('cursor-pointer').addClass('cursor-pointer');
+
         // Add event listener for opening and closing details
-        $('#crudTable tbody').on('click', 'td .details-row-button', function () {
+        $('#crudTable tbody td.details-control').on('click', function () {
             var tr = $(this).closest('tr');
-            var btn = $(this);
+            var btn = $(this).find('.details-row-button');
             var row = table.row( tr );
 
             if ( row.child.isShown() ) {
                 // This row is already open - close it
-                $(this).removeClass('fa-minus-square-o').addClass('fa-plus-square-o');
+                btn.removeClass('fa-minus-square-o').addClass('fa-plus-square-o');
                 $('div.table_row_slider', row.child()).slideUp( function () {
                     row.child.hide();
                     tr.removeClass('shown');
@@ -320,7 +330,7 @@
             }
             else {
                 // Open this row
-                $(this).removeClass('fa-plus-square-o').addClass('fa-minus-square-o');
+                btn.removeClass('fa-plus-square-o').addClass('fa-minus-square-o');
                 // Get the details with ajax
                 $.ajax({
                   url: '{{ url($crud->route) }}/'+btn.data('entry-id')+'/details',

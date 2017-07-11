@@ -20,6 +20,69 @@ All Notable changes to `Backpack CRUD` will be documented in this file
 - Nothing
 
 
+## [3.2.13] - 2017-07-07
+
+## Added
+- German translation, thanks to [Oliver Ziegler](https://github.com/OliverZiegler);
+- PHP 7.1 to TravisCI;
+
+### Fixed
+- resources loaded twice on tabbed forms - fixes #509;
+- beforeColumn and afterColumn not working after setFromDb();
+- afterField() always placing the field on the second position;
+- date_range filter - clear button now works;
+- select2 variants load the JS and CSS from CDN now to fix styling issues;
+- show_fields error when no tabs on CRUD entity;
+
+## [3.2.12] - 2017-05-31
+
+### Added
+- Latvian translation files (thanks to [Erik Bonder](https://github.com/erik-ropez));
+- Russian translation files (thanks to [Aleksei Budaev](https://a-budaev.ru/));
+- Dutch translation files (thanks to [Jelmer Visser](https://github.com/jelmervisser))
+
+### Fixed
+- allow for revisions by non-logged-in users; fixes #566;
+- upgraded Select2 to the latest version, in all select2 fields;
+- fixed select2_from_ajax_multiple;
+- translated "edit translations" button;
+- localize the filters navbar view;
+- inline validation error for array fields;
+- moved button initialization to CrudPanel constructor;
+- pagelength bug; undoes PR #596;
+
+
+## [3.2.11] - 2017-04-21
+
+### Removed
+- Backpack\CRUD no longer loads translations, as Backpack\Base does it for him.
+
+## [3.2.10] - 2017-04-21
+
+### Added
+- prefix feature to the image field;
+
+### Fixed
+- select_multiple has allows_null option;
+- details_row for AjaxDataTables;
+
+
+## [3.2.9] - 2017-04-20
+
+### Added
+- email column type;
+
+### Fixed
+- fewer ajax requests when using detailsRow;
+- redirect back to the same entry - fixed by #612;
+- use "admin" as default elfinder prefix;
+- datepicker error fixed by [Pavol Tanuška](https://github.com/pavoltanuska);
+- simplemde field also triggered ckeditor when place before it, because of an extra class;
+- details row column can be clicked entirely (thanks to [votintsev](https://github.com/votintsev));
+- simpleMDE bug fixes and features #507 (thanks to [MarcosBL](https://github.com/MarcosBL));
+- allow for dot notation when specifying the label of a reordered item (thanks to [Adam Kelsven](https://github.com/a2thek26));
+
+
 ## [3.2.8] - 2017-04-03
 
 ### Added

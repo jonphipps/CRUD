@@ -32,13 +32,18 @@ return [
     // Revisions
     'revisions'            => 'Revisions',
     'no_revisions'         => 'No revisions found',
-    'created_this'          => 'created this',
+    'created_this'         => 'created this',
     'changed_the'          => 'changed the',
     'restore_this_value'   => 'Restore this value',
     'from'                 => 'from',
     'to'                   => 'to',
     'undo'                 => 'Undo',
     'revision_restored'    => 'Revision successfully restored',
+    'guest_user'           => 'Guest User',
+
+    // Translatable models
+    'edit_translations' => 'EDIT TRANSLATIONS',
+    'language'          => 'Language',
 
     // CRUD table view
     'all'                       => 'All ',
@@ -102,6 +107,11 @@ return [
     // CRUD yes/no
         'yes' => 'Yes',
         'no' => 'No',
+
+    // CRUD filters navbar view
+        'filters' => 'Filters',
+        'toggle_filters' => 'Toggle filters',
+        'remove_filters' => 'Remove filters',
 
     // Fields
         'browse_uploads' => 'Browse uploads',
