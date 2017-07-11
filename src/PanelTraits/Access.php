@@ -2,6 +2,8 @@
 
 namespace Backpack\CRUD\PanelTraits;
 
+use Illuminate\Auth\Access\AuthorizationException;
+
 trait Access
 {
     /*
@@ -81,11 +83,12 @@ trait Access
      * @param string $permission
      *
      * @return bool|null
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function hasAccessOrFail($permission)
+    public function hasAccessOrFail($permission): ?bool
     {
         if (! in_array($permission, $this->access)) {
-            abort(403, trans('backpack::crud.unauthorized_access'));
+            throw new AuthorizationException();
         }
     }
 }
