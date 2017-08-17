@@ -15,12 +15,18 @@ trait Fields
      */
     public function addField($field, $form = 'both')
     {
-        // if the field_defition_array array is a string, it means the programmer was lazy and has only passed the name
+        // if the field_definition_array array is a string, it means the programmer was lazy and has only passed the name
         // set some default values, so the field will still work
         if (is_string($field)) {
             $complete_field_array['name'] = $field;
         } else {
             $complete_field_array = $field;
+        }
+
+        // if this is a relation type field and no corresponding model was specified, get it from the relation method
+        // defined in the main model
+        if (isset($complete_field_array['entity']) && ! isset($complete_field_array['model'])) {
+            $complete_field_array['model'] = $this->getRelationModel($complete_field_array['entity']);
         }
 
         // if the label is missing, we should set it
@@ -77,13 +83,15 @@ trait Fields
     {
         foreach ($this->create_fields as $field => $value) {
             if ($value['name'] == $target_field) {
-                array_splice($this->create_fields, $field + 1, 0, [$field => array_pop($this->create_fields)]);
+                $offset = array_search($field, array_keys($this->create_fields));
+                array_splice($this->create_fields, $offset + 1, 0, [$field => array_pop($this->create_fields)]);
                 break;
             }
         }
         foreach ($this->update_fields as $field => $value) {
             if ($value['name'] == $target_field) {
-                array_splice($this->update_fields, $field + 1, 0, [$field => array_pop($this->update_fields)]);
+                $offset = array_search($field, array_keys($this->update_fields));
+                array_splice($this->update_fields, $offset + 1, 0, [$field => array_pop($this->update_fields)]);
                 break;
             }
         }
