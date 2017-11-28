@@ -2,7 +2,7 @@
 
 namespace Backpack\CRUD\PanelTraits;
 
-use Illuminate\Auth\Access\AuthorizationException;
+use Backpack\CRUD\Exception\AccessDeniedException;
 
 trait Access
 {
@@ -79,15 +79,17 @@ trait Access
     /**
      * Check if a permission is enabled for a Crud Panel. Fail if not.
      *
-     * @param  [string] Permission.
-     * @param string $permission
+     * @param string $permission Permission
+     * @return bool
      *
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws \Backpack\CRUD\Exception\AccessDeniedException in case the permission is not enabled
      */
-    public function hasAccessOrFail($permission): void
+    public function hasAccessOrFail($permission)
     {
-        if (! in_array($permission, $this->access, false)) {
-            throw new AuthorizationException('Unauthorized!');
+        if (! in_array($permission, $this->access)) {
+            throw new AccessDeniedException(trans('backpack::crud.unauthorized_access'));
         }
+
+        return true;
     }
 }
