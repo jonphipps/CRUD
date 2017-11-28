@@ -2,6 +2,7 @@
 
 namespace Backpack\CRUD\PanelTraits;
 
+use Illuminate\Support\Facades\Schema;
 trait Columns
 {
     // ------------
@@ -87,7 +88,7 @@ trait Columns
         }
 
         // check if the column exists in the DB table
-        if (\Schema::hasColumn($this->model->getTable(), $column_with_details['name'])) {
+        if (Schema::hasColumn($this->model->getTable(), $column_with_details['name'])) {
             $column_with_details['tableColumn'] = true;
         } else {
             $column_with_details['tableColumn'] = false;
