@@ -12,16 +12,15 @@
             <option value="">-</option>
         @endif
 
-            @if (count($field['options']))
-                @foreach ($field['options'] as $key => $value)
-                    <option value="{{ $key }}"
-                        @if (isset($field['value']) && ($key==$field['value'] || (is_array($field['value']) && in_array($key, $field['value'])))
-                            || ( ! is_null( old($field['name']) ) && old($field['name']) == $key))
-                             selected
-                        @endif
-                    >{{ $value }}</option>
-                @endforeach
-            @endif
+        @if (count($field['options']))
+            @foreach ($field['options'] as $key => $value)
+                @if((old($field['name']) && ($key == old($field['name']) || is_array(old($field['name'])) && in_array($key, old($field['name'])))) || (is_null(old($field['name'])) && isset($field['value']) && ($key == $field['value'] || (is_array($field['value']) && in_array($key, $field['value'])))))
+                    <option value="{{ $key }}" selected>{{ $value }}</option>
+                @else
+                    <option value="{{ $key }}">{{ $value }}</option>
+                @endif
+            @endforeach
+        @endif
     </select>
 
     {{-- HINT --}}
@@ -39,7 +38,7 @@
     @push('crud_fields_styles')
     <!-- include select2 css-->
     <link href="{{ asset('vendor/adminlte/plugins/select2/select2.min.css') }}" rel="stylesheet" type="text/css" />
-    {{-- <link href="{{ asset('vendor/backpack/select2/select2-bootstrap-dick.css') }}" rel="stylesheet" type="text/css" /> --}}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css" rel="stylesheet" type="text/css" />
     @endpush
 
     {{-- FIELD JS - will be loaded in the after_scripts section --}}
