@@ -59,10 +59,12 @@ class CrudController extends BaseController
     /**
      * Display all rows in the database for this entity.
      *
+     * @return Response
      */
     public function index()
     {
         $this->crud->hasAccessOrFail('list');
+        $this->removeColumns('list');
 
         $this->data['crud'] = $this->crud;
         $this->data['title'] = ucfirst($this->crud->entity_name_plural);
@@ -74,6 +76,7 @@ class CrudController extends BaseController
     /**
      * Show the form for creating inserting a new row.
      *
+     * @return Response
      */
     public function create()
     {
@@ -197,9 +200,6 @@ class CrudController extends BaseController
     {
         $this->crud->hasAccessOrFail('show');
 
-        // set columns from db
-        $this->crud->setFromDb();
-
         // cycle through columns
         foreach ($this->crud->columns as $key => $column) {
             // remove any autoset relationship columns
@@ -207,6 +207,8 @@ class CrudController extends BaseController
                 $this->crud->removeColumn($column['name']);
             }
         }
+
+        $this->removeColumns('show');
 
         // get the info for that entry
         $this->data['entry'] = $this->crud->getEntry($id);
@@ -233,5 +235,19 @@ class CrudController extends BaseController
         $this->crud->hasAccessOrFail('delete');
 
         return $this->crud->delete($id);
+    }
+
+    /**
+     * @param string $type  should be either 'list' or 'show'
+     */
+    private function removeColumns($type): void
+    {
+        // cycle through columns
+        foreach ($this->crud->columns as $key => $column) {
+            // remove columns where $type is set to false
+            if (array_key_exists($type, $column) && $column[$type] === false) {
+                $this->crud->removeColumn($key);
+            }
+        }
     }
 }
