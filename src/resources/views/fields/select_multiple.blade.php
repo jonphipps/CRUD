@@ -3,7 +3,6 @@
     <label>{!! $field['label'] !!}</label>
     @include('crud::inc.field_translatable_icon')
     <select
-    	class="form-control"
         name="{{ $field['name'] }}[]"
         @include('crud::inc.field_attributes')
     	multiple>
