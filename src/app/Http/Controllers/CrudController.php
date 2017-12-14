@@ -16,7 +16,6 @@ use Backpack\CRUD\app\Http\Controllers\CrudFeatures\SaveActions;
 use Backpack\CRUD\app\Http\Requests\CrudRequest as StoreRequest;
 use Backpack\CRUD\app\Http\Requests\CrudRequest as UpdateRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudFeatures\ShowDetailsRow;
-use Illuminate\View\View;
 
 class CrudController extends BaseController
 {
