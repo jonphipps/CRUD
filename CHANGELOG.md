@@ -21,6 +21,13 @@ All Notable changes to `Backpack CRUD` will be documented in this file
 
 -----------
 
+## [3.3.3] - 2017-12-14
+
+## Fixed
+- Chinese translation;
+- datetimepicker icon now triggers datetimepicker js - merged #1097;
+- columns are now picked up using the database connection on the model - merged #1141; fixes #1136;
+- model_function buttons now work for top and bottom stacks too - fixes #713;
 
 ## [3.3.2] - 2017-12-12
 
