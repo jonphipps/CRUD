@@ -22,6 +22,7 @@ use Backpack\CRUD\PanelTraits\AutoFocus;
 use Backpack\CRUD\PanelTraits\FakeFields;
 use Backpack\CRUD\PanelTraits\FakeColumns;
 use Backpack\CRUD\PanelTraits\ViewsAndRestoresRevisions;
+use Illuminate\Support\Facades\Schema;
 
 class CrudPanel
 {
@@ -110,7 +111,7 @@ class CrudPanel
      */
     private function getSchema()
     {
-        return \Schema::setConnection($this->getModel()->getConnection());
+        return Schema::setConnection($this->getModel()->getConnection());
     }
 
     /**
