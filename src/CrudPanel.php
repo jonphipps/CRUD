@@ -108,14 +108,16 @@ class CrudPanel
         return $this->model;
     }
 
-    /**
-     * Get the database connection, as specified in the .env file or overwritten by the property on the model.
-     */
-    private function getSchema()
+    protected function getDbColumns()
     {
-        return \Schema::setConnection($this->getModel()->getConnection());
+        if (empty($this->db_columns)) {
+            $table         = $this->model->getTable();
+            $conn          = $this->model->getConnection();
+            $this->db_columns = $conn->getDoctrineSchemaManager()->listTableColumns($table);
         }
 
+        return $this->db_columns;
+    }
     /**
      * Set the route for this CRUD.
      * Ex: admin/article.
