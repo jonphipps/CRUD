@@ -58,7 +58,10 @@ class CrudPanel
     public $query;
     public $entry;
     public $buttons;
-    public $db_column_types = [];
+
+    protected $db_columns = [];
+    protected $db_column_types = [];
+    protected $db_column_names = [];
     public $default_page_length = false;
 
     // TONE FIELDS - TODO: find out what he did with them, replicate or delete
@@ -111,7 +114,7 @@ class CrudPanel
     private function getSchema()
     {
         return \Schema::setConnection($this->getModel()->getConnection());
-    }
+        }
 
     /**
      * Set the route for this CRUD.
