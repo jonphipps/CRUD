@@ -60,6 +60,8 @@ trait Columns
      * Add a column at the end of to the CRUD object's "columns" array.
      *
      * @param [string or array]
+     *
+     * @return Columns
      */
     public function addColumn($column)
     {
@@ -358,14 +360,6 @@ trait Columns
 
     protected function hasColumn($table, $name)
     {
-        static $cache = [];
-
-        if (isset($cache[$table])) {
-            $columns = $cache[$table];
-        } else {
-            $columns = $cache[$table] = $this->getSchema()->getColumnListing($table);
-        }
-
-        return in_array($name, $columns);
+        return \in_array($name, $this->getDbColumnsNames(), true);
     }
 }
