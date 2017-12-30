@@ -53,19 +53,20 @@ trait AutoSet
     /**
      * Get all columns from the database for that table.
      *
-     * @return [array]
+     * @return array
      */
     public function getDbColumnTypes()
     {
-        $table = $this->model->getTable();
-        $conn = $this->model->getConnection();
-        $table_columns = $conn->getDoctrineSchemaManager()->listTableColumns($table);
+        if (empty($this->db_column_types)) {
+            $table_columns = $this->getDbColumns();
 
             foreach ($table_columns as $key => $column) {
                 $column_type = $column->getType()->getName();
+
                 $this->db_column_types[ $column->getName() ]['type']    = trim(preg_replace('/\(\d+\)(.*)/i', '', $column_type));
                 $this->db_column_types[ $column->getName() ]['default'] = $column->getDefault();
             }
+        }
 
         return $this->db_column_types;
     }
@@ -75,7 +76,7 @@ trait AutoSet
      *
      * @param  [string] Field name.
      *
-     * @return [string] Fielt type.
+     * @return string Field type.
      */
     public function getFieldTypeFromDbColumnType($field)
     {
@@ -157,7 +158,7 @@ trait AutoSet
      *
      * @param  [string]
      *
-     * @return [string]
+     * @return string
      */
     public function makeLabel($value)
     {
