@@ -11,8 +11,10 @@ trait AutoSet
     /**
      * For a simple CRUD Panel, there should be no need to add/define the fields.
      * The public columns in the database will be converted to be fields.
+     *
+     * @param bool $filtered
      */
-    public function setFromDb()
+    public function setFromDb($filtered = true)
     {
         $this->setDoctrineTypesMapping();
         $this->getDbColumnTypes();
@@ -45,7 +47,7 @@ trait AutoSet
                     'autoset' => true,
                 ]);
             }
-        }, $this->getDbColumnsNames());
+        }, $this->getDbColumnsNames($filtered));
     }
 
     /**
