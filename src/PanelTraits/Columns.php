@@ -2,7 +2,6 @@
 
 namespace Backpack\CRUD\PanelTraits;
 
-use Illuminate\Support\Facades\Schema;
 trait Columns
 {
     // ------------
@@ -80,7 +79,7 @@ trait Columns
         }
 
         // check if the column exists in the database table
-        $columnExistsInDb = $this->hasColumn($this->model->getTable(), $column_with_details['name']);
+        $columnExistsInDb = $this->hasColumn($column_with_details['name']);
 
         // make sure the column has a type
         if (! array_key_exists('type', $column_with_details)) {
@@ -359,8 +358,14 @@ trait Columns
         return reset($result);
     }
 
-    protected function hasColumn($table, $name)
+    /**
+     * Determine if the column is a real column in the database
+     * @param $name
+     *
+     * @return bool
+     */
+    protected function hasColumn($name)
     {
-        return \in_array($name, $this->getDbColumnsNames(), true);
+        return \in_array($name, $this->getAllDbColumnsNames(), true);
     }
 }

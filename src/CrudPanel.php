@@ -62,6 +62,7 @@ class CrudPanel
     protected $db_columns = [];
     protected $db_column_types = [];
     protected $db_column_names = [];
+    protected $db_all_column_names = [];
     public $default_page_length = false;
 
     // TONE FIELDS - TODO: find out what he did with them, replicate or delete
