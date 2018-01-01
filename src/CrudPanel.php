@@ -22,7 +22,6 @@ use Backpack\CRUD\PanelTraits\AutoFocus;
 use Backpack\CRUD\PanelTraits\FakeFields;
 use Backpack\CRUD\PanelTraits\FakeColumns;
 use Backpack\CRUD\PanelTraits\ViewsAndRestoresRevisions;
-use Illuminate\Support\Facades\Schema;
 
 class CrudPanel
 {
@@ -59,7 +58,10 @@ class CrudPanel
     public $query;
     public $entry;
     public $buttons;
-    public $db_column_types = [];
+
+    protected $db_columns = [];
+    protected $db_column_types = [];
+    protected $db_column_names = [];
     public $default_page_length = false;
 
     // TONE FIELDS - TODO: find out what he did with them, replicate or delete
@@ -106,14 +108,16 @@ class CrudPanel
         return $this->model;
     }
 
-    /**
-     * Get the database connection, as specified in the .env file or overwritten by the property on the model.
-     */
-    private function getSchema()
+    protected function getDbColumns()
     {
-        return Schema::setConnection($this->getModel()->getConnection());
-    }
+        if (empty($this->db_columns)) {
+            $table         = $this->model->getTable();
+            $conn          = $this->model->getConnection();
+            $this->db_columns = $conn->getDoctrineSchemaManager()->listTableColumns($table);
+        }
 
+        return $this->db_columns;
+    }
     /**
      * Set the route for this CRUD.
      * Ex: admin/article.

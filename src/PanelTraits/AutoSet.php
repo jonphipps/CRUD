@@ -11,8 +11,10 @@ trait AutoSet
     /**
      * For a simple CRUD Panel, there should be no need to add/define the fields.
      * The public columns in the database will be converted to be fields.
+     *
+     * @param bool $filtered
      */
-    public function setFromDb()
+    public function setFromDb($filtered = true)
     {
         $this->setDoctrineTypesMapping();
         $this->getDbColumnTypes();
@@ -45,24 +47,25 @@ trait AutoSet
                     'autoset' => true,
                 ]);
             }
-        }, $this->getDbColumnsNames());
+        }, $this->getDbColumnsNames($filtered));
     }
 
     /**
      * Get all columns from the database for that table.
      *
-     * @return [array]
+     * @return array
      */
     public function getDbColumnTypes()
     {
-        $table = $this->model->getTable();
-        $conn = $this->model->getConnection();
-        $table_columns = $conn->getDoctrineSchemaManager()->listTableColumns($table);
+        if (empty($this->db_column_types)) {
+            $table_columns = $this->getDbColumns();
 
-        foreach ($table_columns as $key => $column) {
-            $column_type = $column->getType()->getName();
-            $this->db_column_types[$column->getName()]['type'] = trim(preg_replace('/\(\d+\)(.*)/i', '', $column_type));
-            $this->db_column_types[$column->getName()]['default'] = $column->getDefault();
+            foreach ($table_columns as $key => $column) {
+                $column_type = $column->getType()->getName();
+
+                $this->db_column_types[ $column->getName() ]['type']    = trim(preg_replace('/\(\d+\)(.*)/i', '', $column_type));
+                $this->db_column_types[ $column->getName() ]['default'] = $column->getDefault();
+            }
         }
 
         return $this->db_column_types;
@@ -73,7 +76,7 @@ trait AutoSet
      *
      * @param  [string] Field name.
      *
-     * @return [string] Fielt type.
+     * @return string Field type.
      */
     public function getFieldTypeFromDbColumnType($field)
     {
@@ -155,7 +158,7 @@ trait AutoSet
      *
      * @param  [string]
      *
-     * @return [string]
+     * @return string
      */
     public function makeLabel($value)
     {
@@ -165,19 +168,37 @@ trait AutoSet
     /**
      * Get the database column names, in order to figure out what fields/columns to show in the auto-fields-and-columns functionality.
      *
-     * @return [array] Database column names as an array.
+     * @param bool $filtered
+     *
+     * @return array Database column names as an array.
      */
-    public function getDbColumnsNames()
+    public function getDbColumnsNames($filtered = true)
     {
-        // Automatically-set columns should be both in the database, and in the $fillable variable on the Eloquent Model
-        $columns = $this->model->getConnection()->getSchemaBuilder()->getColumnListing($this->model->getTable());
-        $fillable = $this->model->getFillable();
-
-        if (! empty($fillable)) {
-            $columns = array_intersect($columns, $fillable);
+        if (empty($this->db_column_types)) {
+            $this->getDbColumnTypes();
         }
 
-        // but not updated_at, deleted_at
-        return array_values(array_diff($columns, [$this->model->getKeyName(), $this->model->getCreatedAtColumn(), $this->model->getUpdatedAtColumn(), 'deleted_at']));
+        //build the db_column_names array only once
+        if (empty($this->db_column_names)) {
+            // Automatically-set columns should be both in the database, and in the $fillable variable on the Eloquent Model
+            $this->db_column_names = array_keys($this->db_column_types);
+
+            if ( $filtered) {
+                $columns  = $this->db_column_names;
+                $fillable = $this->model->getFillable();
+                if ( ! empty($fillable)) {
+                    $columns = array_intersect($columns, $fillable);
+                }// but not updated_at, deleted_at
+                $this->db_column_names = array_values(array_diff($columns,
+                    [
+                        $this->model->getKeyName(),
+                        $this->model->getCreatedAtColumn(),
+                        $this->model->getUpdatedAtColumn(),
+                        'deleted_at',
+                    ]));
+            }
+        }
+
+        return $this->db_column_names;
     }
 }
